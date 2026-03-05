@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IconX — Static Icons Feel Alive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* ═══════════════════════════════════════════
+   ICONX — DESIGN SYSTEM
+═══════════════════════════════════════════ */
+:root {
+  --bg:        #0d1117;
+  --bg2:       #161b22;
+  --bg3:       #21262d;
+  --border:    #30363d;
+  --border2:   #3d444d;
+  --text:      #e6edf3;
+  --text2:     #7d8590;
+  --text3:     #484f58;
+  --green:     #3fb950;
+  --green-dim: rgba(63,185,80,0.12);
+  --blue:      #58a6ff;
+  --blue-dim:  rgba(88,166,255,0.1);
+  --orange:    #f0883e;
+  --pink:      #f778ba;
+  --teal:      #39d5c8;
+  --yellow:    #e3b341;
+  --mono:      'Berkeley Mono', 'Courier New', monospace;
+  --sans:      'Geist', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCAN LINE OVERLAY ─────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ══════════════════════════════════════
+   GITHUB-STYLE TOPBAR
+══════════════════════════════════════ */
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.octo {
+  width: 32px; height: 32px;
+  animation: octo-spin 8s linear infinite;
+}
+@keyframes octo-spin {
+  0%,100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+}
+
+.topbar-search {
+  flex: 1;
+  max-width: 280px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.topbar-search:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+  color: var(--text);
+}
+.topbar-search::placeholder { color: var(--text3); }
+
+.topbar-nav { display: flex; gap: 16px; margin-left: auto; }
+.topbar-nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.topbar-nav a:hover { background: var(--bg3); }
+
+/* ══════════════════════════════════════
+   REPO HEADER
+══════════════════════════════════════ */
+.repo-header {
+  border-bottom: 1px solid var(--border);
+  padding: 20px 24px 0;
+  background: var(--bg);
+}
+
+.repo-path {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text2);
+  margin-bottom: 16px;
+}
+.repo-path strong { color: var(--blue); font-weight: 600; }
+.repo-path span { color: var(--text2); }
+
+.repo-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: -1px;
+}
+.repo-tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--text2);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s;
+  user-select: none;
+}
+.repo-tab:hover { color: var(--text); }
+.repo-tab.active {
+  color: var(--text);
+  border-bottom-color: var(--orange);
+}
+.repo-tab .badge {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1px 7px;
+  font-size: 11px;
+  color: var(--text2);
+}
+
+/* ══════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════ */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 296px;
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* ══════════════════════════════════════
+   REPO META BAR
+══════════════════════════════════════ */
+.meta-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 0;
+}
+.branch-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+.branch-select::after { content: '▾'; font-size: 11px; color: var(--text2); }
+
+.meta-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.commit-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; box-shadow: 0 0 8px var(--green); }
+  50% { opacity:0.5; box-shadow: 0 0 4px var(--green); }
+}
+
+.meta-bar-right { margin-left: auto; display: flex; gap: 8px; }
+.btn-sm {
+  padding: 4px 12px;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  background: var(--bg3);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+  font-family: var(--sans);
+}
+.btn-sm:hover { background: var(--border); border-color: var(--text3); }
+.btn-sm.green {
+  background: var(--green-dim);
+  border-color: rgba(63,185,80,0.4);
+  color: var(--green);
+}
+.btn-sm.green:hover { background: rgba(63,185,80,0.2); }
+
+/* ══════════════════════════════════════
+   FILE TREE (static, decorative)
+══════════════════════════════════════ */
+.file-tree {
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.file-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  padding: 6px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  transition: background 0.1s;
+  cursor: pointer;
+  gap: 16px;
+}
+.file-row:last-child { border-bottom: none; }
+.file-row:hover { background: var(--blue-dim); }
+.file-name { display: flex; align-items: center; gap: 8px; color: var(--blue); }
+.file-name.dir { color: var(--text); }
+.file-icon { font-size: 15px; }
+.file-commit { color: var(--text2); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
+.file-age { color: var(--text3); font-size: 12px; white-space: nowrap; }
+
+/* ══════════════════════════════════════
+   README SECTION — Icon Grid Lives Here
+══════════════════════════════════════ */
+.readme {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.readme-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.readme-body { padding: 32px; }
+
+.readme-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.readme-badge-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-green { background: rgba(63,185,80,0.15); color: #3fb950; border: 1px solid rgba(63,185,80,0.3); }
+.badge-blue { background: rgba(88,166,255,0.12); color: #58a6ff; border: 1px solid rgba(88,166,255,0.25); }
+.badge-orange { background: rgba(240,136,62,0.12); color: #f0883e; border: 1px solid rgba(240,136,62,0.25); }
+.badge-pink { background: rgba(247,120,186,0.12); color: #f778ba; border: 1px solid rgba(247,120,186,0.25); }
+.badge-pulse::before {
+  content: '●';
+  animation: pulse-dot 1.5s ease infinite;
+  color: inherit;
+}
+
+.readme-desc {
+  font-size: 15px;
+  color: var(--text2);
+  margin-bottom: 32px;
+  line-height: 1.7;
+  border-left: 3px solid var(--orange);
+  padding-left: 16px;
+}
+
+.readme-h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 32px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ══════════════════════════════════════
+   CATEGORY TABS
+══════════════════════════════════════ */
+.cat-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.cat-tab {
+  padding: 5px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text2);
+  font-size: 12px;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cat-tab:hover { border-color: var(--border2); color: var(--text); background: var(--bg3); }
+.cat-tab.active {
+  background: var(--bg3);
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* ══════════════════════════════════════
+   ★ THE ALIVE ICON GRID ★
+══════════════════════════════════════ */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.icon-cell {
+  position: relative;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 8px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+  user-select: none;
+}
+
+.icon-cell:hover {
+  border-color: var(--icon-color, var(--blue));
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4),
+              0 0 20px var(--icon-glow, rgba(88,166,255,0.15));
+  z-index: 2;
+}
+
+/* Shimmer sweep on hover */
+.icon-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.04) 50%, transparent 80%);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.icon-cell:hover::after { transform: translateX(100%); }
+
+/* SVG canvas */
+.icon-svg {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.icon-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  text-align: center;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+  line-height: 1.3;
+}
+.icon-cell:hover .icon-label { color: var(--icon-color, var(--blue)); }
+
+/* ── COPY FLASH ── */
+.icon-cell.copied { animation: flash-copy 0.4s ease; }
+@keyframes flash-copy {
+  0% { background: var(--bg2); }
+  40% { background: var(--green-dim); border-color: var(--green); }
+  100% { background: var(--bg2); }
+}
+
+/* ══════════════════════════════════════
+   INDIVIDUAL ICON ANIMATIONS
+══════════════════════════════════════ */
+
+/* HEARTBEAT */
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+}
+.anim-heartbeat { animation: heartbeat 1.6s ease infinite; }
+
+/* BREATHE */
+@keyframes breathe {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+.anim-breathe { animation: breathe 3s ease-in-out infinite; }
+
+/* FLOAT */
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.anim-float { animation: float 2.8s ease-in-out infinite; }
+
+/* SPIN SLOW */
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.anim-spin { animation: spin-slow 8s linear infinite; transform-origin: center; }
+
+/* WIGGLE */
+@keyframes wiggle {
+  0%,100% { transform: rotate(0deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-6deg); }
+  80% { transform: rotate(6deg); }
+}
+.anim-wiggle { animation: wiggle 2.5s ease-in-out infinite; }
+
+/* BLINK */
+@keyframes blink-scale {
+  0%,90%,100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+.anim-blink { animation: blink-scale 3.5s ease infinite; transform-origin: center; }
+
+/* ORBIT PARTICLE */
+.orbit-wrap { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(20px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
+}
+.orbit-particle {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  margin: -2.5px;
+  animation: orbit 3s linear infinite;
+  box-shadow: 0 0 6px currentColor;
+}
+.orbit-particle:nth-child(2) { animation-delay: -1s; animation-duration: 3.5s; width: 3px; height: 3px; margin: -1.5px; opacity: 0.6; }
+.orbit-particle:nth-child(3) { animation-delay: -2s; animation-duration: 2.5s; width: 4px; height: 4px; margin: -2px; opacity: 0.4; }
+
+/* WAVE DASH */
+@keyframes dash-move {
+  to { stroke-dashoffset: 0; }
+}
+
+/* GLITCH */
+@keyframes glitch-1 {
+  0%,100% { clip-path: inset(0 0 100% 0); transform: translate(0); }
+  5%  { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 1px); }
+  10% { clip-path: inset(40% 0 20% 0); transform: translate(2px, -1px); }
+  15% { clip-path: inset(0 0 100% 0); }
+}
+.anim-glitch { animation: glitch-1 4s steps(1) infinite; }
+
+/* PULSE RING */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.8; }
+  70% { transform: scale(1.3); opacity: 0; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+.pulse-ring {
+  position: absolute;
+  border-radius: 50%;
+  animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+/* MORPH PATH */
+@keyframes morph-path {
+  0%,100% { d: path("M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"); }
+  50% { d: path("M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 4 10-4"); }
+}
+
+/* WAVE */
+@keyframes wave-anim {
+  0%   { transform: rotate(0deg); }
+  10%  { transform: rotate(14deg); }
+  20%  { transform: rotate(-8deg); }
+  30%  { transform: rotate(14deg); }
+  40%  { transform: rotate(-4deg); }
+  50%  { transform: rotate(10deg); }
+  60%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+.anim-wave { animation: wave-anim 2s ease infinite; transform-origin: 70% 70%; }
+
+/* NEON FLICKER */
+@keyframes neon-flicker {
+  0%,19%,21%,23%,25%,54%,56%,100% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); }
+  20%,24%,55% { opacity: 0.4; filter: none; }
+}
+.anim-flicker { animation: neon-flicker 5s linear infinite; }
+
+/* BOUNCE */
+@keyframes bounce-anim {
+  0%,100% { transform: translateY(0); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+  50%     { transform: translateY(-8px); animation-timing-function: cubic-bezier(0,0,0.2,1); }
+}
+.anim-bounce { animation: bounce-anim 1.2s infinite; }
+
+/* COUNTER-SPIN (inner element) */
+@keyframes counter-spin { to { transform: rotate(-360deg); } }
+.anim-counter { animation: counter-spin 4s linear infinite; transform-origin: center; }
+
+/* MAGNETIC PULL on hover — handled via JS */
+
+/* ══════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+.sidebar-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+}
+.sidebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+
+.stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text2);
+  padding: 4px 0;
+}
+.stat-item strong { color: var(--text); }
+
+.lang-bar { margin-top: 8px; }
+.lang-bar-track {
+  height: 8px;
+  border-radius: 8px;
+  background: var(--bg3);
+  overflow: hidden;
+  display: flex;
+  margin-bottom: 8px;
+  gap: 2px;
+}
+.lang-bar-seg { height: 100%; border-radius: 2px; transition: flex 0.5s; }
+.lang-legend { display: flex; flex-direction: column; gap: 4px; }
+.lang-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.activity-graph {
+  display: grid;
+  grid-template-columns: repeat(52, 1fr);
+  gap: 2px;
+  margin-top: 8px;
+}
+.act-week { display: grid; gap: 2px; }
+.act-day {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  background: var(--bg3);
+  transition: background 0.2s;
+}
+.act-day[data-level="1"] { background: rgba(63,185,80,0.25); }
+.act-day[data-level="2"] { background: rgba(63,185,80,0.5); }
+.act-day[data-level="3"] { background: rgba(63,185,80,0.75); }
+.act-day[data-level="4"] { background: var(--green); box-shadow: 0 0 4px var(--green); }
+
+.contributors { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  overflow: hidden;
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: transform 0.2s, border-color 0.2s;
+  cursor: default;
+}
+.avatar:hover { transform: scale(1.15); border-color: var(--blue); z-index: 1; }
+
+.topic-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.topic-tag {
+  padding: 2px 10px;
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid rgba(88,166,255,0.2);
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.topic-tag:hover { background: rgba(88,166,255,0.2); }
+
+/* ══════════════════════════════════════
+   INSTALL BOX
+══════════════════════════════════════ */
+.install-box {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text2);
+  margin-bottom: 20px;
+  gap: 12px;
+}
+.install-box code { color: var(--green); flex: 1; }
+.copy-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: var(--text2);
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--text3); }
+
+/* ══════════════════════════════════════
+   USAGE CODE BLOCK
+══════════════════════════════════════ */
+.code-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+.tok-key { color: var(--blue); }
+.tok-str { color: var(--orange); }
+.tok-cmt { color: var(--text3); }
+.tok-fn  { color: var(--teal); }
+.tok-num { color: var(--pink); }
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.site-footer a { color: var(--text2); text-decoration: none; }
+.site-footer a:hover { color: var(--text); }
+
+/* ══════════════════════════════════════
+   TOOLTIP
+══════════════════════════════════════ */
+.tooltip {
+  position: fixed;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: var(--text);
+  font-family: var(--mono);
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+/* ── CURSOR GLOW ── */
+.cursor-glow {
+  position: fixed;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(88,166,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: left 0.1s, top 0.1s;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { order: -1; }
+  .icon-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ══ TOPBAR ══════════════════════════════════════════════════ -->
+<div class="topbar">
+  <a class="topbar-logo" href="#">
+    <svg class="octo" viewBox="0 0 24 24" fill="none">
+      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span style="font-weight:600; font-size:16px;">GitHub</span>
+  </a>
+  <input class="topbar-search" type="text" placeholder="Search or jump to…" />
+  <nav class="topbar-nav">
+    <a href="#">Pull requests</a>
+    <a href="#">Issues</a>
+    <a href="#">Marketplace</a>
+    <a href="#">Explore</a>
+  </nav>
+</div>
+
+<!-- ══ REPO HEADER ════════════════════════════════════════════ -->
+<div class="repo-header">
+  <div class="repo-path">
+    <span style="color:var(--text2)">you /</span>
+    <strong> IconX</strong>
+    <span style="margin-left:8px;padding:2px 8px;border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text2)">Public</span>
+  </div>
+  <div class="repo-tabs">
+    <div class="repo-tab active">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8V1.5Z"/></svg>
+      Code
+    </div>
+    <div class="repo-tab">Issues <span class="badge">0</span></div>
+    <div class="repo-tab">Pull requests <span class="badge">0</span></div>
+    <div class="repo-tab">Actions</div>
+    <div class="repo-tab">⭐ Star <span class="badge" id="starCount">4.2k</span></div>
+    <div class="repo-tab">Fork <span class="badge">312</span></div>
+  </div>
+</div>
+
+<!-- ══ MAIN LAYOUT ════════════════════════════════════════════ -->
+<div class="layout">
+  <!-- LEFT COLUMN -->
+  <div>
+
+    <!-- META BAR -->
+    <div class="meta-bar">
+      <div class="branch-select">main</div>
+      <div class="meta-stat">
+        <div class="commit-dot"></div>
+        <span><strong>847</strong> commits</span>
+      </div>
+      <div class="meta-stat" style="margin-left:8px">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" style="color:var(--text2)"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/></svg>
+        <span><strong>2</strong> branches</span>
+      </div>
+      <div class="meta-bar-right">
+        <button class="btn-sm green">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          Code ▾
+        </button>
+      </div>
+    </div>
+
+    <!-- FILE TREE -->
+    <div class="file-tree">
+      <div class="file-row" style="background:var(--bg2);border-bottom:1px solid var(--border);">
+        <div class="file-name dir">📁 src</div>
+        <div class="file-commit">feat: add magnetic hover engine</div>
+        <div class="file-age">2 days ago</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name dir">📁 dist</div>
+        <div class="file-commit">build: bundle v3.2.1</div>
+        <div class="file-age">2 days ago</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name dir">📁 examples</div>
+        <div class="file-commit">docs: add alive icon demos</div>
+        <div class="file-age">5 days ago</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name">🟨 package.json</div>
+        <div class="file-commit">chore: bump version to 3.2.1</div>
+        <div class="file-age">2 days ago</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name">📘 README.md</div>
+        <div class="file-commit">docs: update alive icon showcase</div>
+        <div class="file-age">yesterday</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name">⚙️ vite.config.ts</div>
+        <div class="file-commit">build: optimize tree-shaking</div>
+        <div class="file-age">1 week ago</div>
+      </div>
+      <div class="file-row">
+        <div class="file-name">📄 LICENSE</div>
+        <div class="file-commit">chore: MIT license</div>
+        <div class="file-age">3 months ago</div>
+      </div>
+    </div>
+
+    <!-- ★ README / ALIVE ICON SHOWCASE ★ -->
+    <div class="readme">
+      <div class="readme-header">
+        📄 README.md
+      </div>
+      <div class="readme-body">
+
+        <div class="readme-title">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="16" r="14" fill="rgba(240,136,62,0.15)" stroke="#f0883e" stroke-width="1.5"/>
+            <path d="M10 22L16 10l6 12" stroke="#f0883e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 18h8" stroke="#f0883e" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          IconX
+        </div>
+
+        <div class="readme-badge-row">
+          <span class="badge badge-green badge-pulse">v3.2.1</span>
+          <span class="badge badge-blue">MIT</span>
+          <span class="badge badge-orange">847 icons</span>
+          <span class="badge badge-pink">TypeScript</span>
+          <span class="badge badge-green">zero deps</span>
+        </div>
+
+        <p class="readme-desc">
+          Static icons feel <strong>dead</strong>.<br>
+          IconX icons feel <strong>alive</strong>.<br><br>
+          Every icon breathes, pulses, orbits, glitches, and reacts to your cursor —
+          because a good icon is not a picture. It's a <em>presence</em>.
+          847 icons. Zero dependencies. One line to make them live.
+        </p>
+
+        <div class="install-box">
+          <code>npm install iconx</code>
+          <button class="copy-btn" onclick="copyInstall(this)">Copy</button>
+        </div>
+
+        <div class="readme-h2">
+          🔥 Browse &amp; click to copy
+          <span style="font-family:var(--mono);font-size:11px;color:var(--text3);font-weight:400;margin-left:auto">hover to awaken · click to copy SVG</span>
+        </div>
+
+        <!-- CATEGORY TABS -->
+        <div class="cat-tabs" id="catTabs">
+          <button class="cat-tab active" data-cat="all">All</button>
+          <button class="cat-tab" data-cat="interface">Interface</button>
+          <button class="cat-tab" data-cat="media">Media</button>
+          <button class="cat-tab" data-cat="arrows">Arrows</button>
+          <button class="cat-tab" data-cat="nature">Nature</button>
+          <button class="cat-tab" data-cat="tech">Tech</button>
+          <button class="cat-tab" data-cat="social">Social</button>
+          <button class="cat-tab" data-cat="finance">Finance</button>
+        </div>
+
+        <!-- ★ THE ALIVE ICON GRID ★ -->
+        <div class="icon-grid" id="iconGrid"></div>
+
+        <div class="readme-h2">📦 Usage</div>
+        <div class="code-block">
+<span class="tok-cmt">// import any icon</span><br>
+<span class="tok-key">import</span> { <span class="tok-fn">HeartIcon</span>, <span class="tok-fn">StarIcon</span>, <span class="tok-fn">ZapIcon</span> } <span class="tok-key">from</span> <span class="tok-str">'iconx'</span><br><br>
+<span class="tok-cmt">// use it — it's already alive</span><br>
+&lt;<span class="tok-fn">HeartIcon</span> <span class="tok-key">size</span>=<span class="tok-num">{24}</span> <span class="tok-key">animation</span>=<span class="tok-str">"heartbeat"</span> /&gt;<br><br>
+<span class="tok-cmt">// or go manual</span><br>
+&lt;<span class="tok-fn">ZapIcon</span> <span class="tok-key">size</span>=<span class="tok-num">{32}</span> <span class="tok-key">color</span>=<span class="tok-str">"#f0883e"</span> <span class="tok-key">animation</span>=<span class="tok-str">"pulse"</span> <span class="tok-key">orbit</span> /&gt;
+        </div>
+
+        <div class="readme-h2">✨ Animation Modes</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:24px;font-size:13px;">
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--pink)">◆</span> <code>heartbeat</code> — lifelike pulse</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--teal)">◆</span> <code>breathe</code> — slow expand/contract</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--blue)">◆</span> <code>float</code> — gentle levitation</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--yellow)">◆</span> <code>spin</code> — continuous rotation</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--orange)">◆</span> <code>wiggle</code> — playful shake</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--green)">◆</span> <code>orbit</code> — particle ring</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--pink)">◆</span> <code>glitch</code> — cyberpunk flicker</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--teal)">◆</span> <code>neon</code> — neon flicker</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--blue)">◆</span> <code>bounce</code> — elastic jump</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--yellow)">◆</span> <code>blink</code> — eye blink effect</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--orange)">◆</span> <code>wave</code> — wave greeting</div>
+          <div style="padding:10px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;gap:8px;"><span style="color:var(--green)">◆</span> <code>magnetic</code> — cursor attraction</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN — SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">ℹ️ About</div>
+      <div class="sidebar-desc">847 animated icons that feel alive. Zero dependencies. TypeScript first. Static icons are dead — IconX icons breathe.</div>
+      <div class="topic-tags">
+        <span class="topic-tag">icons</span>
+        <span class="topic-tag">svg</span>
+        <span class="topic-tag">animation</span>
+        <span class="topic-tag">react</span>
+        <span class="topic-tag">typescript</span>
+        <span class="topic-tag">design-system</span>
+        <span class="topic-tag">ui</span>
+        <span class="topic-tag">zero-deps</span>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">📊 Stats</div>
+      <div class="stat-row">
+        <div class="stat-item">⭐ <strong id="stars2">4.2k</strong>&nbsp;stars</div>
+        <div class="stat-item">🔀 <strong>312</strong>&nbsp;forks</div>
+        <div class="stat-item">👁 <strong>89</strong>&nbsp;watching</div>
+        <div class="stat-item">🐛 <strong>0</strong>&nbsp;issues</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">💻 Languages</div>
+      <div class="lang-bar">
+        <div class="lang-bar-track">
+          <div class="lang-bar-seg" style="flex:62;background:var(--blue)"></div>
+          <div class="lang-bar-seg" style="flex:28;background:var(--yellow)"></div>
+          <div class="lang-bar-seg" style="flex:10;background:var(--pink)"></div>
+        </div>
+        <div class="lang-legend">
+          <div class="lang-legend-item"><div class="lang-dot" style="background:var(--blue)"></div> TypeScript <span style="margin-left:auto;color:var(--text3)">62%</span></div>
+          <div class="lang-legend-item"><div class="lang-dot" style="background:var(--yellow)"></div> JavaScript <span style="margin-left:auto;color:var(--text3)">28%</span></div>
+          <div class="lang-legend-item"><div class="lang-dot" style="background:var(--pink)"></div> CSS <span style="margin-left:auto;color:var(--text3)">10%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">📅 Activity</div>
+      <div class="activity-graph" id="actGraph"></div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">👥 Contributors</div>
+      <div class="contributors" id="contributors"></div>
+    </div>
+
+    <div class="sidebar-card" style="border-color:rgba(240,136,62,0.3);background:rgba(240,136,62,0.05)">
+      <div style="font-size:12px;color:var(--orange);margin-bottom:8px;font-weight:600">🔔 Latest Release · v3.2.1</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.6">
+        + Added 47 new alive icons<br>
+        + Magnetic cursor engine v2<br>
+        + Orbit particle system<br>
+        + Glitch animation preset<br>
+        ✓ Performance: 60fps guaranteed
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════ -->
+<div class="site-footer">
+  <span>© 2025 GitHub, Inc.</span>
+  <a href="#">Terms</a>
+  <a href="#">Privacy</a>
+  <a href="#">Security</a>
+  <a href="#">Status</a>
+  <a href="#">Docs</a>
+  <a href="#">Contact</a>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT — ICON FACTORY + INTERACTIONS
+══════════════════════════════════════════════════════════ -->
+<script>
+/* ── ICON DEFINITIONS ────────────────────────────────────── */
+const ICONS = [
+  // Interface
+  { name:'heart',      cat:'interface', color:'#f778ba', glow:'rgba(247,120,186,0.25)', anim:'heartbeat', orbit:true,
+    svg:`<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.5" fill="rgba(247,120,186,0.15)" stroke-linecap="round"/>` },
+
+  { name:'star',       cat:'interface', color:'#e3b341', glow:'rgba(227,179,65,0.25)', anim:'float',
+    svg:`<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.15)" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'bell',       cat:'interface', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'wiggle',
+    svg:`<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>` },
+
+  { name:'eye',        cat:'interface', color:'#39d5c8', glow:'rgba(57,213,200,0.2)', anim:'blink',
+    svg:`<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(57,213,200,0.2)"/>` },
+
+  { name:'zap',        cat:'interface', color:'#f0883e', glow:'rgba(240,136,62,0.25)', anim:'flicker', orbit:true,
+    svg:`<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="1.5" fill="rgba(240,136,62,0.15)" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'home',       cat:'interface', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'breathe',
+    svg:`<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.1)"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.5"/>` },
+
+  { name:'user',       cat:'interface', color:'#3fb950', glow:'rgba(63,185,80,0.2)', anim:'breathe',
+    svg:`<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5" fill="rgba(63,185,80,0.15)"/>` },
+
+  { name:'lock',       cat:'interface', color:'#f0883e', glow:'rgba(240,136,62,0.2)', anim:'wiggle',
+    svg:`<rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="rgba(240,136,62,0.1)"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>` },
+
+  { name:'search',     cat:'interface', color:'#7d8590', glow:'rgba(125,133,144,0.2)', anim:'spin',
+    svg:`<circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'settings',   cat:'interface', color:'#7d8590', glow:'rgba(125,133,144,0.2)', anim:'spin',
+    svg:`<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="1.5" fill="none"/>` },
+
+  // Media
+  { name:'play',       cat:'media', color:'#3fb950', glow:'rgba(63,185,80,0.25)', anim:'heartbeat', orbit:true,
+    svg:`<polygon points="5 3 19 12 5 21 5 3" stroke="currentColor" stroke-width="1.5" fill="rgba(63,185,80,0.2)" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'pause',      cat:'media', color:'#f778ba', glow:'rgba(247,120,186,0.2)', anim:'breathe',
+    svg:`<line x1="6" y1="4" x2="6" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="18" y1="4" x2="18" y2="20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>` },
+
+  { name:'volume',     cat:'media', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'wiggle',
+    svg:`<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.15)"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'music',      cat:'media', color:'#e3b341', glow:'rgba(227,179,65,0.2)', anim:'float', orbit:true,
+    svg:`<path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.2)"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.2)"/>` },
+
+  { name:'camera',     cat:'media', color:'#39d5c8', glow:'rgba(57,213,200,0.2)', anim:'blink',
+    svg:`<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" fill="rgba(57,213,200,0.1)"/><circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.5" fill="rgba(57,213,200,0.2)"/>` },
+
+  { name:'mic',        cat:'media', color:'#f0883e', glow:'rgba(240,136,62,0.2)', anim:'breathe', orbit:true,
+    svg:`<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" stroke="currentColor" stroke-width="1.5" fill="rgba(240,136,62,0.15)"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  // Arrows
+  { name:'arrow-up',   cat:'arrows', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'bounce',
+    svg:`<line x1="12" y1="19" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="5 12 12 5 19 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'arrow-right',cat:'arrows', color:'#3fb950', glow:'rgba(63,185,80,0.2)', anim:'float',
+    svg:`<line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="12 5 19 12 12 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'refresh',    cat:'arrows', color:'#39d5c8', glow:'rgba(57,213,200,0.2)', anim:'spin',
+    svg:`<polyline points="23 4 23 10 17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="1 20 1 14 7 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'shuffle',    cat:'arrows', color:'#e3b341', glow:'rgba(227,179,65,0.2)', anim:'wiggle',
+    svg:`<polyline points="16 3 21 3 21 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="4" y1="20" x2="21" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><polyline points="21 16 21 21 16 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="15" x2="21" y2="21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  // Nature
+  { name:'sun',        cat:'nature', color:'#e3b341', glow:'rgba(227,179,65,0.3)', anim:'spin', orbit:true,
+    svg:`<circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.2)"/><line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'moon',       cat:'nature', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'float',
+    svg:`<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.15)"/>` },
+
+  { name:'cloud',      cat:'nature', color:'#7d8590', glow:'rgba(125,133,144,0.2)', anim:'float',
+    svg:`<path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" stroke="currentColor" stroke-width="1.5" fill="rgba(125,133,144,0.15)"/>` },
+
+  { name:'droplet',    cat:'nature', color:'#39d5c8', glow:'rgba(57,213,200,0.25)', anim:'breathe',
+    svg:`<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" stroke="currentColor" stroke-width="1.5" fill="rgba(57,213,200,0.15)"/>` },
+
+  { name:'leaf',       cat:'nature', color:'#3fb950', glow:'rgba(63,185,80,0.25)', anim:'wiggle',
+    svg:`<path d="M17 8C8 10 5.9 16.17 3.82 19.09a.5.5 0 0 1-.82-.18C2.34 17.28 2 14.76 2 12c0-5.52 5-10 11-10 0 0 4 2 4 6 0 0-4-1-7-1" stroke="currentColor" stroke-width="1.5" fill="rgba(63,185,80,0.15)" stroke-linecap="round"/>` },
+
+  // Tech
+  { name:'code',       cat:'tech', color:'#f0883e', glow:'rgba(240,136,62,0.2)', anim:'breathe',
+    svg:`<polyline points="16 18 22 12 16 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="8 6 2 12 8 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'terminal',   cat:'tech', color:'#3fb950', glow:'rgba(63,185,80,0.2)', anim:'blink',
+    svg:`<polyline points="4 17 10 11 4 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="19" x2="20" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'cpu',        cat:'tech', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'spin',
+    svg:`<rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.1)"/><rect x="9" y="9" width="6" height="6" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.2)"/><line x1="9" y1="1" x2="9" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="1" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="9" y1="20" x2="9" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="20" x2="15" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="20" y1="9" x2="23" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="20" y1="14" x2="23" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="9" x2="4" y2="9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="1" y1="14" x2="4" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'wifi',       cat:'tech', color:'#39d5c8', glow:'rgba(57,213,200,0.2)', anim:'breathe',
+    svg:`<path d="M1.42 9a16 16 0 0 1 21.16 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M5 12.55a11 11 0 0 1 14.08 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="12" cy="20" r="1" fill="currentColor"/>` },
+
+  { name:'database',   cat:'tech', color:'#e3b341', glow:'rgba(227,179,65,0.2)', anim:'heartbeat',
+    svg:`<ellipse cx="12" cy="5" rx="9" ry="3" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.15)"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" stroke="currentColor" stroke-width="1.5"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" stroke="currentColor" stroke-width="1.5"/>` },
+
+  { name:'box',        cat:'tech', color:'#f778ba', glow:'rgba(247,120,186,0.2)', anim:'float',
+    svg:`<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" stroke="currentColor" stroke-width="1.5" fill="rgba(247,120,186,0.1)"/>` },
+
+  // Social
+  { name:'share',      cat:'social', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'orbit',
+    svg:`<circle cx="18" cy="5" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.2)"/><circle cx="6" cy="12" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.2)"/><circle cx="18" cy="19" r="3" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.2)"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="currentColor" stroke-width="1.5"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="currentColor" stroke-width="1.5"/>` },
+
+  { name:'message',    cat:'social', color:'#3fb950', glow:'rgba(63,185,80,0.2)', anim:'breathe',
+    svg:`<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.5" fill="rgba(63,185,80,0.15)"/>` },
+
+  { name:'link',       cat:'social', color:'#f0883e', glow:'rgba(240,136,62,0.2)', anim:'float',
+    svg:`<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'mail',       cat:'social', color:'#e3b341', glow:'rgba(227,179,65,0.2)', anim:'wiggle',
+    svg:`<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" fill="rgba(227,179,65,0.1)"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  // Finance
+  { name:'trending',   cat:'finance', color:'#3fb950', glow:'rgba(63,185,80,0.25)', anim:'float',
+    svg:`<polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 6 23 6 23 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>` },
+
+  { name:'dollar',     cat:'finance', color:'#e3b341', glow:'rgba(227,179,65,0.25)', anim:'heartbeat', orbit:true,
+    svg:`<line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'bar-chart',  cat:'finance', color:'#f0883e', glow:'rgba(240,136,62,0.2)', anim:'breathe',
+    svg:`<line x1="18" y1="20" x2="18" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="20" x2="12" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="20" x2="6" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>` },
+
+  { name:'pie-chart',  cat:'finance', color:'#58a6ff', glow:'rgba(88,166,255,0.2)', anim:'spin',
+    svg:`<path d="M21.21 15.89A10 10 0 1 1 8 2.83" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.1)" stroke-linecap="round"/><path d="M22 12A10 10 0 0 0 12 2v10z" stroke="currentColor" stroke-width="1.5" fill="rgba(88,166,255,0.25)"/>` },
+];
+
+/* ── RENDER ICON GRID ─────────────────────────────────── */
+function renderGrid(cat = 'all') {
+  const grid = document.getElementById('iconGrid');
+  const filtered = cat === 'all' ? ICONS : ICONS.filter(i => i.cat === cat);
+  grid.innerHTML = '';
+
+  filtered.forEach((icon, idx) => {
+    const cell = document.createElement('div');
+    cell.className = 'icon-cell';
+    cell.style.setProperty('--icon-color', icon.color);
+    cell.style.setProperty('--icon-glow', icon.glow);
+    cell.dataset.name = icon.name;
+    cell.dataset.svg = icon.svg;
+    cell.style.animationDelay = `${idx * 0.03}s`;
+
+    // Build inner SVG with chosen animation
+    const animClass = getAnimClass(icon.anim);
+    const needsOrbit = icon.orbit;
+
+    cell.innerHTML = `
+      <div class="icon-svg" style="color:${icon.color};display:flex;align-items:center;justify-content:center;position:relative;">
+        ${needsOrbit ? `
+        <div class="orbit-wrap">
+          <div class="orbit-particle" style="color:${icon.color};background:${icon.color}"></div>
+          <div class="orbit-particle" style="color:${icon.color};background:${icon.color};animation-delay:-1.2s"></div>
+        </div>` : ''}
+        <svg width="28" height="28" viewBox="0 0 24 24" class="${animClass}" style="overflow:visible;filter:drop-shadow(0 0 3px ${icon.color}33)">
+          ${icon.svg}
+        </svg>
+      </div>
+      <div class="icon-label">${icon.name}</div>
+    `;
+
+    // Click to copy
+    cell.addEventListener('click', () => {
+      const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">${icon.svg}</svg>`;
+      navigator.clipboard.writeText(fullSvg).catch(() => {});
+      cell.classList.add('copied');
+      setTimeout(() => cell.classList.remove('copied'), 600);
+      showTooltip(`Copied ${icon.name}!`, cell);
+    });
+
+    // Magnetic hover
+    cell.addEventListener('mousemove', (e) => magneticMove(e, cell));
+    cell.addEventListener('mouseleave', (e) => magneticLeave(cell));
+
+    grid.appendChild(cell);
+  });
+}
+
+function getAnimClass(anim) {
+  const map = {
+    heartbeat: 'anim-heartbeat',
+    breathe:   'anim-breathe',
+    float:     'anim-float',
+    spin:      'anim-spin',
+    wiggle:    'anim-wiggle',
+    blink:     'anim-blink',
+    flicker:   'anim-flicker',
+    bounce:    'anim-bounce',
+    wave:      'anim-wave',
+    glitch:    'anim-glitch',
+    orbit:     'anim-float',
+  };
+  return map[anim] || 'anim-breathe';
+}
+
+/* ── MAGNETIC HOVER ──────────────────────────────────── */
+function magneticMove(e, el) {
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = (e.clientX - cx) / (rect.width / 2);
+  const dy = (e.clientY - cy) / (rect.height / 2);
+  el.style.transform = `translateY(-3px) scale(1.04) translate(${dx * 4}px, ${dy * 4}px)`;
+}
+function magneticLeave(el) {
+  el.style.transform = '';
+}
+
+/* ── TOOLTIP ─────────────────────────────────────────── */
+function showTooltip(text, el) {
+  const tip = document.getElementById('tooltip');
+  const rect = el.getBoundingClientRect();
+  tip.textContent = text;
+  tip.style.left = (rect.left + rect.width/2) + 'px';
+  tip.style.top  = (rect.top - 36) + 'px';
+  tip.style.transform = 'translateX(-50%)';
+  tip.style.opacity = '1';
+  setTimeout(() => { tip.style.opacity = '0'; }, 1200);
+}
+
+/* ── CATEGORY TABS ───────────────────────────────────── */
+document.getElementById('catTabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('.cat-tab');
+  if (!btn) return;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrid(btn.dataset.cat);
+});
+
+/* ── CURSOR GLOW ─────────────────────────────────────── */
+const glow = document.getElementById('cursorGlow');
+document.addEventListener('mousemove', (e) => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top  = e.clientY + 'px';
+});
+
+/* ── ACTIVITY GRAPH ──────────────────────────────────── */
+function buildActivity() {
+  const graph = document.getElementById('actGraph');
+  graph.innerHTML = '';
+  for (let w = 0; w < 52; w++) {
+    const week = document.createElement('div');
+    week.className = 'act-week';
+    for (let d = 0; d < 7; d++) {
+      const day = document.createElement('div');
+      day.className = 'act-day';
+      const r = Math.random();
+      if (r > 0.85) day.dataset.level = '4';
+      else if (r > 0.65) day.dataset.level = '3';
+      else if (r > 0.45) day.dataset.level = '2';
+      else if (r > 0.3)  day.dataset.level = '1';
+      week.appendChild(day);
+    }
+    graph.appendChild(week);
+  }
+}
+
+/* ── CONTRIBUTORS ────────────────────────────────────── */
+function buildContributors() {
+  const emojis = ['🦊','🐙','🦅','🌊','⚡','🌿','🔮','🎯','🦁','🐝','🌙','🔥'];
+  const c = document.getElementById('contributors');
+  c.innerHTML = emojis.map(e => `<div class="avatar" title="contributor">${e}</div>`).join('');
+}
+
+/* ── STAR COUNTER ANIMATION ──────────────────────────── */
+function animateStars() {
+  let n = 4200;
+  const el = document.getElementById('starCount');
+  const el2 = document.getElementById('stars2');
+  const target = 4200 + Math.floor(Math.random() * 3);
+  setInterval(() => {
+    if (n < target) { n++; }
+    el.textContent = (n / 1000).toFixed(1) + 'k';
+    el2.textContent = (n / 1000).toFixed(1) + 'k';
+  }, 5000 + Math.random() * 10000);
+}
+
+/* ── COPY INSTALL ────────────────────────────────────── */
+window.copyInstall = function(btn) {
+  navigator.clipboard.writeText('npm install iconx').catch(() => {});
+  btn.textContent = 'Copied!';
+  btn.style.color = 'var(--green)';
+  setTimeout(() => {
+    btn.textContent = 'Copy';
+    btn.style.color = '';
+  }, 1500);
+};
+
+/* ── SEARCH FILTER ───────────────────────────────────── */
+document.querySelector('.topbar-search').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase();
+  if (!q) { renderGrid('all'); return; }
+  const grid = document.getElementById('iconGrid');
+  grid.querySelectorAll('.icon-cell').forEach(cell => {
+    cell.style.display = cell.dataset.name.includes(q) ? 'flex' : 'none';
+  });
+});
+
+/* ── STAR BUTTON CLICK ───────────────────────────────── */
+document.querySelectorAll('.repo-tab').forEach(tab => {
+  if (tab.textContent.includes('Star')) {
+    tab.addEventListener('click', () => {
+      tab.style.color = 'var(--yellow)';
+      tab.querySelector('.badge').style.background = 'rgba(227,179,65,0.2)';
+      tab.querySelector('.badge').style.color = 'var(--yellow)';
+    });
+  }
+});
+
+/* ── INIT ─────────────────────────────────────────────── */
+renderGrid('all');
+buildActivity();
+buildContributors();
+animateStars();
+</script>
+</body>
+</html>
